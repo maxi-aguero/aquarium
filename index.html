@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pecera con Tiburón</title>
+  <title>Pecera Interactiva</title>
   <style>
     body {
-      background-color: #e0f7fa;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background: #e0f7fa;
       margin: 0;
       font-family: sans-serif;
     }
@@ -20,57 +19,69 @@
       width: 90vw;
       max-width: 400px;
       height: 300px;
-      border: 5px solid #0277bd;
-      background-color: #81d4fa;
+      border: 5px solid #0288d1;
+      border-radius: 10px;
       overflow: hidden;
+      background-color: #b3e5fc;
     }
 
-    .agua {
+    #agua {
       position: absolute;
       bottom: 0;
       width: 100%;
-      background-color: #29b6f6;
-      transition: height 0.2s;
+      height: 100%;
+      background-color: #03a9f4;
+      transition: height 0.3s;
     }
 
-    .tiburon {
+    #tiburon {
       position: absolute;
       bottom: 0;
-      font-size: 40px;
-      animation: moverTiburon 2s linear infinite;
+      font-size: 2.5em;
+      animation: moverTiburon 2s infinite alternate linear;
     }
 
     @keyframes moverTiburon {
-      0% { left: 0; transform: scaleX(1); }
-      49% { left: 100%; transform: scaleX(1); }
-      50% { left: 100%; transform: scaleX(-1); }
-      100% { left: 0; transform: scaleX(-1); }
+      from {
+        left: 0;
+        transform: scaleX(1);
+      }
+      to {
+        left: calc(100% - 2.5em);
+      }
+    }
+
+    .muerto {
+      animation: none !important;
     }
   </style>
 </head>
 <body>
   <div class="pecera">
-    <div id="agua" class="agua" style="height: 100%;"></div>
-    <div id="tiburon" class="tiburon">🦈</div>
+    <div id="agua"></div>
+    <div id="tiburon">🦈</div>
   </div>
 
   <script>
-    const agua = document.getElementById("agua");
-    const tiburon = document.getElementById("tiburon");
-    let altura = 100; // Porcentaje
+    const agua = document.getElementById('agua');
+    const tiburon = document.getElementById('tiburon');
+
+    let altura = 100;
 
     function bajarAgua() {
-      if (altura <= 0) {
-        agua.style.height = '0%';
-        tiburon.innerText = "💀"; // Muere
-        return;
+      if (altura > 0) {
+        altura -= 1;
+        agua.style.height = altura + '%';
+        setTimeout(bajarAgua, 500);
+      } else {
+        // El agua se terminó: el tiburón muere
+        tiburon.textContent = '💀';
+        tiburon.classList.add('muerto'); // Quita animación
       }
-      altura -= 1; // Baja 1% por ciclo
-      agua.style.height = altura + "%";
-      setTimeout(bajarAgua, 500); // cada medio segundo
     }
 
     bajarAgua();
   </script>
 </body>
 </html>
+

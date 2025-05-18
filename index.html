@@ -1,87 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Pecera Interactiva</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pecera Animada</title>
   <style>
     body {
+      margin: 0;
+      background-color: #dffbff;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #e0f7fa;
-      margin: 0;
-      font-family: sans-serif;
     }
 
     .pecera {
       position: relative;
-      width: 90vw;
-      max-width: 400px;
-      height: 300px;
-      border: 5px solid #0288d1;
+      width: 250px;
+      height: 200px;
+      border: 4px solid #0288d1;
       border-radius: 10px;
       overflow: hidden;
       background-color: #b3e5fc;
     }
 
-    #agua {
+    .agua {
       position: absolute;
       bottom: 0;
       width: 100%;
       height: 100%;
       background-color: #03a9f4;
-      transition: height 0.3s;
+      animation: bajarAgua 6s linear forwards;
     }
 
-    #tiburon {
+    @keyframes bajarAgua {
+      0% {
+        height: 100%;
+      }
+      100% {
+        height: 10%;
+      }
+    }
+
+    .pez,
+    .calavera {
       position: absolute;
-      bottom: 0;
-      font-size: 2.5em;
-      animation: moverTiburon 2s infinite alternate linear;
+      bottom: 10px;
+      font-size: 28px;
+      left: 5%;
     }
 
-    @keyframes moverTiburon {
-      from {
-        left: 0;
-        transform: scaleX(1);
+    .pez {
+      animation: nadar 5s linear infinite alternate;
+    }
+
+    @keyframes nadar {
+      0% {
+        left: 5%;
       }
-      to {
-        left: calc(100% - 2.5em);
+      100% {
+        left: 75%;
       }
     }
 
-    .muerto {
-      animation: none !important;
+    .calavera {
+      display: none;
+      left: 50%;
+      transform: translateX(-50%);
     }
   </style>
 </head>
 <body>
   <div class="pecera">
-    <div id="agua"></div>
-    <div id="tiburon">🦈</div>
+    <div class="agua" id="agua"></div>
+    <div class="pez" id="pez">🐟</div>
+    <div class="calavera" id="calavera">☠️</div>
   </div>
 
   <script>
+    // Cuando termina la animación del agua, reemplaza el pez por la calavera
     const agua = document.getElementById('agua');
-    const tiburon = document.getElementById('tiburon');
+    const pez = document.getElementById('pez');
+    const calavera = document.getElementById('calavera');
 
-    let altura = 100;
-
-    function bajarAgua() {
-      if (altura > 0) {
-        altura -= 1;
-        agua.style.height = altura + '%';
-        setTimeout(bajarAgua, 500);
-      } else {
-        // El agua se terminó: el tiburón muere
-        tiburon.textContent = '💀';
-        tiburon.classList.add('muerto'); // Quita animación
-      }
-    }
-
-    bajarAgua();
+    agua.addEventListener('animationend', () => {
+      pez.style.display = 'none';
+      calavera.style.display = 'block';
+    });
   </script>
 </body>
 </html>
-
